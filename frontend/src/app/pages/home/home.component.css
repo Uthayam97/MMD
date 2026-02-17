@@ -1,0 +1,2 @@
+﻿.hero-image { height: 420px; object-fit: cover; }
+@media (max-width: 768px) { .hero-image { height: 240px; } }

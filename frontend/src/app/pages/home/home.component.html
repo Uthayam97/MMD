@@ -1,0 +1,20 @@
+﻿<div class="container py-4">
+  <div id="heroCarousel" class="carousel slide mb-4" data-bs-ride="carousel" *ngIf="slides.length">
+    <div class="carousel-indicators">
+      <button *ngFor="let slide of slides; let i = index" type="button" data-bs-target="#heroCarousel" [attr.data-bs-slide-to]="i" [class.active]="i===0"></button>
+    </div>
+    <div class="carousel-inner rounded-3 overflow-hidden shadow">
+      <div class="carousel-item" [class.active]="i===0" *ngFor="let slide of slides; let i = index">
+        <img [src]="slide.image" class="d-block w-100 hero-image" [alt]="slide.title" />
+        <div class="carousel-caption text-start bg-dark bg-opacity-50 p-3 rounded-2"><h3>{{ slide.title }}</h3><p>{{ slide.subtitle }}</p></div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+  </div>
+  <section class="bg-white p-4 rounded-3 shadow-sm border">
+    <h1 class="h3 mb-3">Welcome to Our Department Store</h1>
+    <p class="mb-2">We bring trusted brands, premium quality products, and competitive pricing under one roof.</p>
+    <p class="mb-0 text-muted">Shop confidently with secure checkout, curated collections, and dedicated support.</p>
+  </section>
+</div>
