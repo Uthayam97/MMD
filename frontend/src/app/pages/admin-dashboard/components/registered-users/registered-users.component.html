@@ -1,0 +1,29 @@
+<div class="card shadow-sm">
+  <div class="card-header">Registered Users</div>
+  <div class="table-responsive">
+    <table class="table table-sm mb-0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span
+              class="badge"
+              [class.bg-primary]="user.role === 'admin'"
+              [class.bg-secondary]="user.role !== 'admin'"
+            >
+              {{ user.role }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

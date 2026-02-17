@@ -1,3 +1,72 @@
 ﻿@import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fb; }
+
+
+/* NAVBAR BACKGROUND */
+.custom-navbar {
+  background: linear-gradient(90deg, #111, #1c1c1c);
+  padding: 14px 0;
+  transition: 0.3s ease;
+}
+
+/* BRAND STYLE */
+.brand-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.brand-highlight {
+  color: #ffc107;
+  font-size: 1.6rem;
+}
+
+/* NAV LINKS */
+.nav-custom {
+  font-weight: 500;
+  position: relative;
+  transition: 0.3s ease;
+}
+
+.nav-custom:hover {
+  color: #ffc107 !important;
+}
+
+.nav-custom::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #ffc107;
+  transition: 0.3s ease;
+}
+
+.nav-custom:hover::after {
+  width: 100%;
+}
+
+/* ACTIVE LINK */
+.nav-link.active {
+  color: #ffc107 !important;
+}
+
+/* CART BADGE */
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: #dc3545;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 4px 6px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+/* CART LINK HOVER */
+.cart-link:hover {
+  color: #ffc107 !important;
+}

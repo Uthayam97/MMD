@@ -39,6 +39,6 @@ export class ProductsComponent implements OnInit {
   get filteredProducts(): Product[] {
     const term = this.searchTerm.toLowerCase().trim();
     if (!term) return this.products;
-    return this.products.filter((p) => `${p.name} ${p.description || ""}`.toLowerCase().includes(term));
+    return this.products.filter((p) => (p.name || "").toLowerCase().includes(term));
   }
 }

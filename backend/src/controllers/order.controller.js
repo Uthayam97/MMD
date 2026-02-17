@@ -3,17 +3,26 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const User = require("../models/User");
 const { sendMail } = require("../services/mail.service");
+const { getIO } = require("../socket");
 
 const paymentMethods = ["card", "upi", "cod", "netbanking"];
+const orderStatuses = ["placed", "processing", "shipped", "out_for_delivery", "delivered", "cancelled"];
+
+const emitOrderEvent = (eventName, order) => {
+  const io = getIO();
+  if (!io || !order?.user) {
+    return;
+  }
+
+  io.to(`user:${order.user.toString()}`).emit(eventName, order);
+  io.to("admins").emit(eventName, order);
+};
 
 const notifyAdminsForOrder = async (order, customer) => {
   try {
-    const admins = await User.find({ role: "admin" }, "email name");
+    const admins = await User.find({ role: "admin" }, "email");
     const adminEmails = admins.map((admin) => admin.email).filter(Boolean);
-
-    if (!adminEmails.length) {
-      return;
-    }
+    if (!adminEmails.length) return;
 
     const lowStockItems = order.items.filter((item) => Number(item.remainingStock) <= 5);
     const lowStockText = lowStockItems.length
@@ -49,10 +58,9 @@ const notifyAdminsForOrder = async (order, customer) => {
       await sendMail({
         to: adminEmails,
         subject: `OUT OF STOCK ALERT - ${order.invoiceNumber}`,
-        text: [
-          "The following products are now out of stock:",
-          ...outOfStockItems.map((item) => `- ${item.name}`),
-        ].join("\n"),
+        text: ["The following products are now out of stock:", ...outOfStockItems.map((item) => `- ${item.name}`)].join(
+          "\n"
+        ),
       });
     }
   } catch (error) {
@@ -83,7 +91,6 @@ const checkout = async (req, res) => {
     for (const entry of cart.items) {
       const product = entry.product;
       const quantity = Number(entry.quantity || 0);
-
       if (!product || !quantity || quantity < 1) {
         return res.status(400).json({ message: "Invalid cart item found" });
       }
@@ -97,9 +104,7 @@ const checkout = async (req, res) => {
         for (const update of stockUpdates) {
           await Product.updateOne({ _id: update.productId }, { $inc: { stock: update.quantity } });
         }
-        return res.status(400).json({
-          message: `Insufficient stock for product: ${product.name}`,
-        });
+        return res.status(400).json({ message: `Insufficient stock for product: ${product.name}` });
       }
 
       const freshProduct = await Product.findById(product._id, "name image price stock");
@@ -130,6 +135,7 @@ const checkout = async (req, res) => {
       },
       items: orderItems,
       totalAmount,
+      status: "placed",
     });
 
     cart.items = [];
@@ -140,6 +146,7 @@ const checkout = async (req, res) => {
       email: req.user?.email,
     });
 
+    emitOrderEvent("order_created", order);
     return res.status(201).json(order);
   } catch (error) {
     return res.status(500).json({ message: "Checkout failed", error: error.message });
@@ -158,4 +165,34 @@ const getMyOrders = async (req, res) => {
   }
 };
 
-module.exports = { checkout, getMyOrders };
+const getAllOrders = async (_req, res) => {
+  try {
+    const orders = await Order.find().populate("user", "name email").sort({ createdAt: -1 });
+    return res.json(orders);
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to fetch orders", error: error.message });
+  }
+};
+
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    if (!orderStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid order status" });
+    }
+
+    const updated = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    if (!updated) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    emitOrderEvent("order_status_updated", updated);
+    return res.json(updated);
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to update order status", error: error.message });
+  }
+};
+
+module.exports = { checkout, getMyOrders, getAllOrders, updateOrderStatus };

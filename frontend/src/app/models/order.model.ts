@@ -25,4 +25,9 @@ export interface Order {
   totalAmount: number;
   status: string;
   createdAt: string;
+  user?: {
+    _id?: string;
+    name?: string;
+    email?: string;
+  } | string;
 }

@@ -1,19 +1,36 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Order } from "../../models/order.model";
 import { OrderService } from "../../services/order.service";
+import { SocketService } from "../../services/socket.service";
 
 @Component({
   selector: "app-user-dashboard",
   templateUrl: "./user-dashboard.component.html",
 })
-export class UserDashboardComponent implements OnInit {
+export class UserDashboardComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   loading = false;
+  trackingMessage = "";
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private socketService: SocketService) {}
 
   ngOnInit(): void {
     this.loadOrders();
+
+    this.socketService.on("order_status_updated", (order: Order) => {
+      this.upsertOrder(order);
+      this.trackingMessage = `Order ${order.invoiceNumber} status updated to ${order.status.toUpperCase()}.`;
+    });
+
+    this.socketService.on("order_created", (order: Order) => {
+      this.upsertOrder(order);
+      this.trackingMessage = `New order tracked: ${order.invoiceNumber}.`;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.socketService.off("order_status_updated");
+    this.socketService.off("order_created");
   }
 
   loadOrders(): void {
@@ -27,6 +44,16 @@ export class UserDashboardComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  upsertOrder(order: Order): void {
+    const index = this.orders.findIndex((entry) => entry._id === order._id);
+    if (index >= 0) {
+      this.orders[index] = order;
+      this.orders = [...this.orders];
+      return;
+    }
+    this.orders = [order, ...this.orders];
   }
 
   downloadBill(order: Order): void {

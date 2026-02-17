@@ -1,0 +1,39 @@
+/* HERO SECTION */
+.about-hero {
+  max-width: 700px;
+  margin: auto;
+}
+
+.about-hero h1 {
+  font-size: 2.2rem;
+}
+
+/* INFO CARDS */
+.info-card {
+  background: #ffffff;
+  padding: 35px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-6px);
+}
+
+/* CORE VALUES */
+.core-values {
+  margin-top: 20px;
+}
+
+.value-card {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 15px;
+  transition: 0.3s ease;
+}
+
+.value-card:hover {
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}

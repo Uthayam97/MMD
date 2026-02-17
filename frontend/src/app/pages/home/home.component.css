@@ -1,2 +1,77 @@
-﻿.hero-image { height: 420px; object-fit: cover; }
-@media (max-width: 768px) { .hero-image { height: 240px; } }
+﻿/* HERO SECTION */
+.hero-carousel {
+  position: relative;
+}
+
+.hero-image {
+  height: 500px;
+  object-fit: cover;
+  filter: brightness(80%);
+}
+
+.custom-caption {
+  bottom: 20%;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+}
+
+/* WELCOME SECTION */
+.welcome-section {
+  max-width: 700px;
+  margin: auto;
+}
+
+/* FEATURE CARDS */
+.feature-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+  height: 100%;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+}
+
+/* CATEGORY CARDS */
+.category-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+}
+
+.category-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* PROMO BANNER */
+.promo-banner {
+  background: linear-gradient(135deg, #111, #333);
+  color: #fff;
+  padding: 60px 20px;
+  border-radius: 20px;
+}
+
+/* TRUST SECTION */
+.trust-section h3 {
+  font-weight: 700;
+  color: #0d6efd;
+}
+
+.trust-section p {
+  color: #6c757d;
+  margin-bottom: 0;
+}

@@ -1,25 +1,111 @@
-﻿<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+﻿<nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold" routerLink="/">Department Store</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"><span class="navbar-toggler-icon"></span></button>
+
+    <!-- BRAND -->
+    <a class="navbar-brand brand-text" routerLink="/">
+      <span class="brand-highlight">D</span>epartment Store
+    </a>
+
+    <!-- TOGGLER -->
+    <button class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- NAV LINKS -->
     <div class="collapse navbar-collapse" id="mainNavbar">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active">About</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/contact" routerLinkActive="active">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a></li>
-        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin"><a class="nav-link" routerLink="/user-dashboard" routerLinkActive="active">User Dashboard</a></li>
-        <li class="nav-item" *ngIf="isAdmin"><a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin Dashboard</a></li>
-      </ul>
-      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-        <li class="nav-item" *ngIf="!isLoggedIn"><a class="btn btn-warning btn-sm" routerLink="/auth">Signup / Login</a></li>
-        <li class="nav-item" *ngIf="isLoggedIn"><button class="btn btn-outline-light btn-sm" (click)="logout()">Logout</button></li>
+
+      <!-- CENTER LINKS -->
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 nav-center">
+
         <li class="nav-item">
-          <a class="nav-link position-relative" routerLink="/cart" routerLinkActive="active">
-            <i class="bi bi-cart3 fs-5"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ cartCount }}</span>
+          <a class="nav-link nav-custom"
+             routerLink="/"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }">
+            Home
           </a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link nav-custom"
+             routerLink="/about"
+             routerLinkActive="active">
+            About
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link nav-custom"
+             routerLink="/products"
+             routerLinkActive="active">
+            Products
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link nav-custom"
+             routerLink="/contact"
+             routerLinkActive="active">
+            Contact
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin">
+          <a class="nav-link nav-custom"
+             routerLink="/user-dashboard"
+             routerLinkActive="active">
+            Dashboard
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="isAdmin">
+          <a class="nav-link nav-custom"
+             routerLink="/admin"
+             routerLinkActive="active">
+            Admin
+          </a>
+        </li>
+
+      </ul>
+
+      <!-- RIGHT SIDE -->
+      <ul class="navbar-nav align-items-center nav-right">
+
+        <li class="nav-item me-3" *ngIf="!isLoggedIn">
+          <a class="btn btn-warning btn-sm px-3 fw-semibold"
+             routerLink="/auth">
+            Sign In
+          </a>
+        </li>
+
+        <li class="nav-item me-3" *ngIf="isLoggedIn">
+          <button class="btn btn-outline-light btn-sm px-3"
+                  (click)="logout()">
+            Logout
+          </button>
+        </li>
+
+        <!-- CART -->
+        <li class="nav-item">
+          <a class="cart-link"
+             routerLink="/cart"
+             routerLinkActive="active">
+
+            <div class="cart-container">
+              <i class="bi bi-cart3 cart-icon"></i>
+
+              <span class="cart-badge"
+                    *ngIf="cartCount > 0">
+                {{ cartCount }}
+              </span>
+            </div>
+
+          </a>
+        </li>
+
       </ul>
     </div>
   </div>
