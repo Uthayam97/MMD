@@ -5,16 +5,19 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const app = require("./app");
 const { setIO } = require("./socket");
+const { parseOrigins } = require("./config/cors");
 
 dotenv.config();
 
 const port = process.env.PORT || 5000;
+const socketOrigins = parseOrigins(process.env.SOCKET_CORS_ORIGIN || process.env.CORS_ORIGIN);
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: socketOrigins.includes("*") ? "*" : socketOrigins,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    credentials: true,
   },
 });
 

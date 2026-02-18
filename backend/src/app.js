@@ -1,6 +1,7 @@
-﻿const express = require("express");
+const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const { parseOrigins, buildCorsOriginHandler } = require("./config/cors");
 
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/product.routes");
@@ -11,8 +12,14 @@ const carouselRoutes = require("./routes/carousel.routes");
 const orderRoutes = require("./routes/order.routes");
 
 const app = express();
+const allowedOrigins = parseOrigins(process.env.CORS_ORIGIN);
+const corsOptions = {
+  origin: buildCorsOriginHandler(allowedOrigins),
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  credentials: true,
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(morgan("dev"));
